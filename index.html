@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Quiz Builder</title>
+</head>
+
+<body>
+    <!-- [welcome,builder,take-quiz] -->
+    <div class="parent">
+
+        <div class="head">
+            <div>
+                <i class="fas fa-brain" style="color: #0000ffee;"></i>
+                <h2 style="color: #0000ffee;">QuizMaster</h2>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="icon" id="builder">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <div>Builder</div>
+                </div>
+                <div class="icon" id="takeQuiz">
+                    <i class="fa-solid fa-play"></i>
+                    <div>Take quiz</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="welcome">
+                <div class="title-start">Custom Quiz</div>
+
+                <div class="content-start">
+                    <div style="padding-top: 60px;">Ready to test Your knowledge?</div>
+                    <div class="btnStart"><button id="btnStart">Start Quiz</button></div>
+                </div>
+
+            </div>
+            <!--Start builder -->
+            <div class="section-builder">
+
+                <div class="head-builder">
+                    <h3>Quiz Builder</h3>
+                    <button id=reset-all>ResetAll</button>
+                </div>
+                <p>Create your custom quiz. Edits are saved automatically</p>
+                <div class="error" id="errorBuilder">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <div>
+                        <h3>ERROR</h3>
+                        <p id="whyWrong"></p>
+                    </div>
+
+                </div>
+
+                <div class="paren-cards">
+                    <!-- from js -->
+                </div>
+
+                <div class="add-Question">
+                    <i class="fas fa-plus"></i><span>Add New Question</span>
+                </div>
+                <div class="save" id="saved">
+                    <i class="fas fa-save"></i><span>Save Quiz To Local Storage</span>
+                </div>
+
+            </div>
+            <!--End builder -->
+
+            <div class="section-take-quiz" class="container">
+                <div id="parentCardSow">
+
+                </div>
+                <div id="counterQuestion">
+                    <div>
+                        <span id="questNow">9</span>
+                        <!-- <span id="totalQuest">10</span> -->
+                    </div>
+                </div>
+            </div>
+            <div id="moveElement">
+                <button id="previous"><i class="fa-solid fa-angle-left"></i></button>
+                <button id="next"><i class="fa-solid fa-angle-right"></i></button>
+                <button id="finish">FINISH</button>
+            </div>
+            <div class="finishPage d-none">
+                <div class="resultExam">
+                    <div id="result">9</div>
+                    <div id="degree">10</div>
+                </div>
+                <div id="massegeResult"></div>
+                <button id="retake">Retake</button>
+
+
+
+            </div>
+
+            <div id="showCorrectAnswer">
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="main.js"></script>
+
+</body>
+
+</html>

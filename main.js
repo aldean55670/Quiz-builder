@@ -8,7 +8,7 @@ let sectionBuilder = document.querySelector(".section-builder");
 let sectionTakeQuiz = document.querySelector(".section-take-quiz");
 let errorBuilder = document.getElementById('errorBuilder');
 let errorMessage = document.getElementById('errorMessage');
-let btnAddQuiz = document.querySelector(".add-Question");
+let btnAddQuestion = document.querySelector(".add-Question");
 let parentCards = document.querySelector('.parent-cards');/* want now */
 let btnAddAnswer = parentCards.querySelectorAll('.add-option');
 let btnSaveToLocalStorage = document.getElementById('saved');
@@ -30,39 +30,37 @@ function show(target, show = true) {
     target.style.display = show ? 'block' : 'none';
 }
 
+function generateId(prefix = 'id') {
+    return `${prefix}-${(Date.now() * Math.random() * 1000).toString(36).substring(2, 9)}`;
+}
+
 /* -------------------------------------
 Auto Save
 ------------------------------------- */
 let arrCards = [];
+
 /* -------------------------------------
 Repeater
 ------------------------------------- */
-let parentId = 1;
-function sortableLibararyOption() {
-    card = document.querySelector('.card');
-    let cardsSortable = document.querySelectorAll(`.parent-cards .card .answer-content`);
-    cardsSortable.forEach((el) => {
-        Sortable.create(el, {
-            group: card,
-            animation: 150
-        })
-    })
-}
 
-function repeatQuiz() {
+function repeatQuestion() {
+    let parentId = generateId('parent');
     let card = document.createElement('div');
+    card.id = parentId;
     card.classList.add('card');
-    card.setAttribute('id', `parent-${parentId}`)
 
-    // head card 
+    // head card
     let divh = document.createElement('div');
     divh.classList.add('head-card');
     divh.innerHTML = `
-        <p>QUESTION <span class="counter-quiz">: ${parentId}</span></p>
-        <i selector="parent-${parentId}" clss="delete" class="fas fa-trash"></i>
+        <div class="d-flex gap-10 flex-center">
+            <i class="fa-solid fa-grip-vertical card-drag-handle"></i>
+            <p>QUESTION <span class="counter-quiz">(${card.id.split('-').pop()})</span></p>
+        </div>
+        <i selector="${card.id}" clss="delete" class="fas fa-trash"></i>
     `;
 
-    // start question 
+    // start question
     let divQuest = document.createElement('div');
     divQuest.classList.add('question-content');
     let inputQuest = document.createElement('input');
@@ -71,7 +69,7 @@ function repeatQuiz() {
 
     divQuest.appendChild(inputQuest);
 
-    // start answer 
+    // start answer
     let ansCont = document.createElement('div');
     ansCont.classList.add('answer-content');
 
@@ -103,43 +101,43 @@ function repeatQuiz() {
     card.appendChild(addOption);
     // Add card to parent
     parentCards.appendChild(card);
-    parentId++;
+
+    // Reinitialize sortable after adding new question
+    initQuestionSortable();
 }
 
-let count = 1;
-function repeatAnswer(parentId) {
-    let answerContainer = document.querySelector(`#parent-${parentId} .answer-content`);
+function addAnswer(parentId) {
+    let optionId = generateId('option');
+    let answerContainer = document.querySelector(`#${parentId} .answer-content`);
     let index = answerContainer.children.length + 1;
     let ansInput = document.createElement('div');
     ansInput.classList.add('answer-input');
-    ansInput.id = `option-${parentId}-${count}`
+    ansInput.id = optionId
 
-    let radioInput = document.createElement('input');
-    radioInput.type = 'radio'
-    radioInput.style = `cursor: pointer;`
-    radioInput.classList.add('radio');
-    radioInput.setAttribute('name', `option_${parentId}`)
-
-    let answerInput = document.createElement('input');
-    answerInput.type = "text";
-    answerInput.classList.add('answer');
-    answerInput.setAttribute('placeholder', `option ${index}`)
-
-    let answerI = document.createElement('i');
-    answerI.className = 'fa-solid fa-xmark';
-    answerI.setAttribute('selector', `option-${index}`)
-
-    ansInput.appendChild(radioInput);
-    ansInput.appendChild(answerInput);
     ansInput.innerHTML += `
-        <i class="fa-solid fa-xmark" onclick="deleteItem('option-${parentId}-${count}')"></i>
+        <div class="d-flex gap-10 flex-grow">
+            <div class="flex-center gap-10">
+                <i class="fa-solid fa-grip-vertical drag-handle"></i>
+                <input type="radio" class="radio" name="${parentId.replace('-', '_')}">
+            </div>
+            <input type="text" class="answer" placeholder="option ${index}">
+        </div>
+        <i class="fa-solid fa-xmark" selector="${ansInput.id}"></i>
     `;
 
     answerContainer.appendChild(ansInput);
-    sortableLibararyOption();
 
+    // Make last option input focused
+    let lastOptionInput = answerContainer.lastElementChild.querySelector('.answer');
+    if (lastOptionInput) lastOptionInput.focus();
 
-
+    // Make the answer content sortable and scroll to the bottom of the page
+    Sortable.create(answerContainer, {
+        handle: '.drag-handle',
+        animation: 150,
+        group: parentId,
+        scroll: true
+    })
 }
 
 function deleteItem(selector) {
@@ -158,7 +156,7 @@ function collectData(card) {
     card.querySelectorAll('.answer-input .answer').forEach(function (el) {
         result.options.push(el.value)
     })
-    // select correctAnswer 
+    // select correctAnswer
     card.querySelectorAll('.radio')
         .forEach(function (el, id) {
             if (el.checked) {
@@ -168,7 +166,7 @@ function collectData(card) {
     return result;
 }
 
-// get from local storage 
+// get from local storage
 function getFromlocalStorage() {
     let countMove = 0;
     let countQuestion = 1;
@@ -178,7 +176,7 @@ function getFromlocalStorage() {
     if (!allExam.length)
         return;
     allExam.forEach(function (el, id) {
-        // question 
+        // question
         let divCard = document.createElement('div');
         divCard.classList.add('cards')
         let divQuest = document.createElement('div');
@@ -276,7 +274,7 @@ function getFromlocalStorage() {
         })
         // correctAnswer
     })
-    // moveElement 
+    // moveElement
     let cardsExam = document.querySelectorAll('.cards');
     cardsExam.forEach(function (card, index) {
         if (index !== 0)
@@ -328,17 +326,20 @@ function showDataInBuilder() {
         // question
         let card = document.createElement('div');
         card.classList.add('card');
-        card.setAttribute('id', `parent-${parentId}`)
+        card.id = generateId('parent');
 
         // head card
         let divh = document.createElement('div');
         divh.classList.add('head-card');
         divh.innerHTML = `
-            <p>QUESTION <span class="counter-quiz">: ${parentId}</span></p>
-            <i selector="parent-${parentId}" clss="delete" class="fas fa-trash"></i>
+            <div class="d-flex gap-10 flex-center">
+                <i class="fa-solid fa-grip-vertical card-drag-handle"></i>
+                <p>QUESTION <span class="counter-quiz">(${card.id.split('-').pop()})</span></p>
+            </div>
+            <i selector="${card.id}" clss="delete" class="fas fa-trash"></i>
         `;
 
-        // start question 
+        // start question
         let divQuest = document.createElement('div');
         divQuest.classList.add('question-content');
         let inputQuest = document.createElement('input');
@@ -346,7 +347,7 @@ function showDataInBuilder() {
         inputQuest.currectAnswer = "select";
         divQuest.appendChild(inputQuest);
 
-        // start answer 
+        // start answer
         let ansCont = document.createElement('div');
         ansCont.classList.add('answer-content');
         let ansP = document.createElement('p');
@@ -369,13 +370,13 @@ function showDataInBuilder() {
             let index = ansCont.children.length + 1;
             let ansInput = document.createElement('div');
             ansInput.classList.add('answer-input');
-            ansInput.id = `option-${parentId}-${index}`
+            ansInput.id = generateId('option');
             let radioInput = document.createElement('input');
             radioInput.type = 'radio'
             radioInput.style = `cursor: pointer;`
             radioInput.classList.add('radio');
             radioInput.checked = e == el.correctAnswer;
-            radioInput.setAttribute('name', `option_${parentId}`)
+            radioInput.setAttribute('name', `option_${card.id}`)
             let answerInput = document.createElement('input');
             answerInput.type = "text";
             answerInput.classList.add('answer');
@@ -384,9 +385,9 @@ function showDataInBuilder() {
             ansInput.appendChild(radioInput);
             let answerI = document.createElement('i');
             answerI.className = 'fa-solid fa-xmark';
-            answerI.setAttribute('selector', `option-${parentId}-${index}`);
+            answerI.setAttribute('selector', ansInput.id);
             answerI.onclick = function () {
-                deleteItem(`option-${parentId}-${index}`);
+                deleteItem(ansInput.id);
             };
             ansInput.appendChild(answerInput);
             ansInput.appendChild(answerI);
@@ -395,7 +396,7 @@ function showDataInBuilder() {
         })
         let addOption = document.createElement('div');
         addOption.classList.add('add-option');
-        addOption.setAttribute('parent-id', parentId);
+        addOption.setAttribute('parent-id', card.id);
 
         let addOptionI = document.createElement('i');
         addOptionI.className = 'fas fa-plus';
@@ -410,9 +411,11 @@ function showDataInBuilder() {
         // Add card to parent
         parentCards.appendChild(card);
         // sectionBuilder.appendChild(parentCards);
-        parentId++
     })
     btnSaveToLocalStorage.style.display = 'block';
+
+    // Initialize sortable for questions
+    initQuestionSortable();
 }
 
 /* -------------------------------------
@@ -457,6 +460,27 @@ btnTakeQuiz.addEventListener('click', function () {
     }
 })
 
+// Variable to store sortable instance
+let questionSortable = null;
+
+// Function to initialize sortable for questions
+function initQuestionSortable() {
+    // Destroy existing instance if it exists
+    if (questionSortable) {
+        questionSortable.destroy();
+    }
+
+    // Create new sortable instance
+    questionSortable = Sortable.create(parentCards, {
+        handle: '.card-drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        scroll: true
+    });
+}
+
 // Add Event Listener to Builder buttons
 btnBuilder.addEventListener('click', function() {
     btnTakeQuiz.classList.remove('active');
@@ -466,6 +490,9 @@ btnBuilder.addEventListener('click', function() {
     show(sectionTakeQuiz, false)
     show(moveElement, false)
     finishPage.style.display = 'none';
+
+    // Initialize sortable for questions
+    initQuestionSortable();
 })
 
 // Add Event Listener to Go to Builder button
@@ -474,18 +501,21 @@ goToBuilder.addEventListener('click', function() {
 });
 
 // Add Event Listener to Add Question button
-btnAddQuiz.addEventListener('click', function () {
-    repeatQuiz();
-    btnAddAnswer = parentCards.querySelectorAll('.add-option');
-    let sortCard = Sortable.create(parentCards)
+btnAddQuestion.addEventListener('click', function () {
+    repeatQuestion();
 
-    window.scrollBy({
-        top: 600,
+    // Scroll to the bottom of the page
+    window.scrollTo({
+        top: document.body.scrollHeight - window.innerHeight,
         behavior: "smooth"
     })
-    let answers = document.querySelectorAll('.question-content input');
-    answers[answers.length - 1].focus();
-    show(btnSaveToLocalStorage, true)
+
+    // Focus on the last question
+    let optionInput = parentCards.lastElementChild.querySelector('.question-content input');
+    if (optionInput) optionInput.focus();
+
+    // Show save button
+    show(btnSaveToLocalStorage, true);
 });
 
 /* -------------------------------------
@@ -556,11 +586,11 @@ document.addEventListener('click', function (e) {
     if (!target) return;
 
     const parentId = target.getAttribute('parent-id');
-    repeatAnswer(parentId)
-    let answers = this.querySelectorAll('.answer');
-    count++;
-    answers[answers.length - 1].focus();
-    window.scrollBy({
+    addAnswer(parentId)
+
+    // Scroll to the bottom of the page
+    window.scrollTo({
+        top: document.body.scrollHeight - window.innerHeight,
         behavior: "smooth"
     })
 });

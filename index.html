@@ -32,18 +32,16 @@
         </div>
 
         <div class="container">
-
+            <!-- Start section welcome -->
             <div class="welcome">
                 <div class="title-start">Custom Quiz</div>
-
                 <div class="content-start">
                     <div style="padding-top: 60px;">Ready to test Your knowledge?</div>
                     <div class="btnStart"><button id="btnStart">Start Quiz</button></div>
-
                 </div>
-
             </div>
-            <!--Start builder -->
+
+            <!-- Start section builder -->
             <div class="section-builder">
 
                 <div class="head-builder">
@@ -72,33 +70,35 @@
                 </div>
 
             </div>
-            <!--End builder -->
 
+            <!-- Start take quiz -->
             <div class="section-take-quiz" class="container">
-                <div id="parentCardSow">
-
-                </div>
+                <div id="parentCardSow"></div>
                 <div id="counterQuestion">
                     <div>
-                        <span id="questNow">9</span>
-                        <!-- <span id="totalQuest">10</span> -->
+                        <span id="questNow">0</span>
                     </div>
-
                 </div>
 
                 <div id="ifNoQuest">
                     <div class="div-icon-NoQuest">
-                        <i class="fa-solid fa-folder-closed" style="color: #afb3bb;"></i>
+                        <i class="fa-solid fa-file-circle-question"></i>
                     </div>
-                    <div class="">no found Question</div>
-
+                    <div class="no-quest-content">
+                        <div class="no-quest-title">No Questions Found</div>
+                        <button class="no-quest-btn" id="goToBuilder">Go to Builder</button>
+                    </div>
                 </div>
             </div>
+
+            <!-- Start move element -->
             <div id="moveElement">
                 <button id="previous"><i class="fa-solid fa-angle-left"></i></button>
                 <button id="next"><i class="fa-solid fa-angle-right"></i></button>
                 <button id="finish">FINISH</button>
             </div>
+
+            <!-- Start finish page -->
             <div class="finishPage d-none">
                 <div class="resultExam">
                     <div id="result">9</div>
@@ -111,26 +111,11 @@
 
             </div>
 
-            <div id="showCorrectAnswer">
-
-            </div>
-
-
+            <!-- Start show correct answer -->
+            <div id="showCorrectAnswer"></div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script src="main.js"></script>
-
 </body>
-
 </html>

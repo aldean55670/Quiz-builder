@@ -7,7 +7,9 @@
 .d-none {
     display: none;
 }
-
+body {
+    font-family: sans-serif;
+}
 .parent {
     background-color: ghostwhite;
     border-bottom-width: 27px;
@@ -40,16 +42,6 @@
     i {
         font-size: small;
     }
-
-    /* #ifNoQuest .div-icon-NoQuest {
-        background-color: lavender;
-        width: 45%;
-        height: 349px;
-        text-align: center;
-        border-radius: 235px;
-        position: relative;
-        top: 59px;
-    } */
 }
 
 
@@ -57,16 +49,6 @@
     .container {
         width: 970px;
     }
-
-    /* #ifNoQuest .div-icon-NoQuest {
-        background-color: lavender;
-        width: 58%;
-        height: 349px;
-        text-align: center;
-        border-radius: 235px;
-        position: relative;
-        top: 59px;
-    } */
 
     .radio {
         position: relative;
@@ -587,25 +569,68 @@ p {
     margin: auto;
     flex-direction: column;
     align-items: center;
-    gap: 36px;
+    gap: 32px;
     display: none;
+    padding: 40px 20px;
 }
+
 #ifNoQuest .div-icon-NoQuest {
-    background-color: lavender;
-    text-align: center;
-    border-radius: 235px;
-}
-#ifNoQuest> :last-child {
-    font-size: x-large;
-    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
 }
 
 #ifNoQuest i {
-    font-size: 167px;
-    position: relative;
-    top: 22%;
-    width: 282px;
-    height: 282px;
+    font-size: 80px;
+    color: #cbd5e0;
 }
 
-/* end section-takequiz */
+.no-quest-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: 500px;
+    text-align: center;
+}
+
+.no-quest-title {
+    font-size: 24px;
+    color: #2d3748;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.no-quest-btn {
+    background: linear-gradient(135deg, #0062ff 0%, #0052d4 100%);
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin: 8px 0;
+    transition: opacity 0.2s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.no-quest-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 25%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: skewX(-20deg);
+    transition: all 0.5s ease;
+}
+
+.no-quest-btn:hover::after {
+    left: 125%;
+}

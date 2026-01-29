@@ -2,6 +2,7 @@
 let welcome = document.querySelector(".welcome")
 let btnStart = document.getElementById("btnStart");
 let btnBuilder = document.getElementById("builder");
+let goToBuilder = document.getElementById("goToBuilder");
 let btnTakeQuiz = document.getElementById("takeQuiz");
 let sectionBuilder = document.querySelector(".section-builder");
 let sectionTakeQuiz = document.querySelector(".section-take-quiz");
@@ -28,6 +29,7 @@ let notFound = document.getElementById('ifNoQuest');
 function show(target, show = true) {
     target.style.display = show ? 'block' : 'none';
 }
+
 /* -------------------------------------
 Auto Save
 ------------------------------------- */
@@ -46,6 +48,7 @@ function sortableLibararyOption() {
         })
     })
 }
+
 function repeatQuiz() {
     let card = document.createElement('div');
     card.classList.add('card');
@@ -138,9 +141,11 @@ function repeatAnswer(parentId) {
 
 
 }
+
 function deleteItem(selector) {
     document.getElementById(selector).remove();
 }
+
 function collectData(card) {
     let result = {
         text: "",
@@ -162,14 +167,15 @@ function collectData(card) {
         })
     return result;
 }
+
 // get from local storage 
 function getFromlocalStorage() {
     let countMove = 0;
     let countQuestion = 1;
     degreeResult = 0;
     questNow.innerHTML = countQuestion;
-    let allExam = JSON.parse(localStorage.getItem('exam'));
-    if (!localStorage.getItem('exam'))
+    let allExam = JSON.parse(localStorage.getItem('exam')) || [];
+    if (!allExam.length)
         return;
     allExam.forEach(function (el, id) {
         // question 
@@ -308,25 +314,30 @@ function getFromlocalStorage() {
         location.reload();
     });
 }
+
+// Show data in builder
 function showDataInBuilder() {
-    let allExam = JSON.parse(localStorage.getItem('exam'));
-    if (!localStorage.getItem('exam')) {
+    let allExam = JSON.parse(localStorage.getItem('exam')) || [];
+    if (!allExam.length) {
         notFound.style.display = 'flex';
         return;
     }
+
     notFound.style.display = 'none';
     allExam.forEach(function (el, id) {
         // question
         let card = document.createElement('div');
         card.classList.add('card');
         card.setAttribute('id', `parent-${parentId}`)
-        // head card 
+
+        // head card
         let divh = document.createElement('div');
         divh.classList.add('head-card');
         divh.innerHTML = `
-        <p>QUESTION <span class="counter-quiz">: ${parentId}</span></p>
-        <i selector="parent-${parentId}" clss="delete" class="fas fa-trash"></i>
-    `;
+            <p>QUESTION <span class="counter-quiz">: ${parentId}</span></p>
+            <i selector="parent-${parentId}" clss="delete" class="fas fa-trash"></i>
+        `;
+
         // start question 
         let divQuest = document.createElement('div');
         divQuest.classList.add('question-content');
@@ -334,6 +345,7 @@ function showDataInBuilder() {
         inputQuest.type = "text";
         inputQuest.currectAnswer = "select";
         divQuest.appendChild(inputQuest);
+
         // start answer 
         let ansCont = document.createElement('div');
         ansCont.classList.add('answer-content');
@@ -343,12 +355,13 @@ function showDataInBuilder() {
         let spanA = document.createElement('span');
         spanA.innerText = '(selext dot dor correct answer)';
         ansP.appendChild(spanA);
-        ;
+
         // Add To card
         card.appendChild(divh);
         card.appendChild(divQuest);
         card.appendChild(ansCont);
-        inputQuest.value = el.text;/*  target   */
+        inputQuest.value = el.text;
+
         // ========================
         // Answer
         // ========================
@@ -401,9 +414,11 @@ function showDataInBuilder() {
     })
     btnSaveToLocalStorage.style.display = 'block';
 }
+
 /* -------------------------------------
 Events
 ------------------------------------- */
+// Add Event Listener to Start button
 btnStart.addEventListener('click', function () {
     takeQuiz.classList.add('active');
     show(welcome, false)
@@ -419,7 +434,9 @@ btnStart.addEventListener('click', function () {
         counterQuestion.style.display = 'flex';
         moveElement.style.display = 'flex';
     }
-})
+});
+
+// Add Event Listener to Take Quiz button
 btnTakeQuiz.addEventListener('click', function () {
     this.classList.add('active');
     btnBuilder.classList.remove('active');
@@ -439,7 +456,9 @@ btnTakeQuiz.addEventListener('click', function () {
         moveElement.style.display = 'flex';
     }
 })
-btnBuilder.addEventListener('click', function () {
+
+// Add Event Listener to Builder buttons
+btnBuilder.addEventListener('click', function() {
     btnTakeQuiz.classList.remove('active');
     this.classList.add('active');
     show(welcome, false);
@@ -447,14 +466,14 @@ btnBuilder.addEventListener('click', function () {
     show(sectionTakeQuiz, false)
     show(moveElement, false)
     finishPage.style.display = 'none';
-    sortableLibararyOption();
-    Sortable.create(parentCards, {
-        animation: 150,
-        scroll: true
-    })
-
-
 })
+
+// Add Event Listener to Go to Builder button
+goToBuilder.addEventListener('click', function() {
+    btnBuilder.click();
+});
+
+// Add Event Listener to Add Question button
 btnAddQuiz.addEventListener('click', function () {
     repeatQuiz();
     btnAddAnswer = parentCards.querySelectorAll('.add-option');
@@ -467,14 +486,15 @@ btnAddQuiz.addEventListener('click', function () {
     let answers = document.querySelectorAll('.question-content input');
     answers[answers.length - 1].focus();
     show(btnSaveToLocalStorage, true)
-})
-// ----------------------
-// btn save
-// ----------------------
+});
+
+/* -------------------------------------
+Save Quiz To Local Storage
+------------------------------------- */
 btnSaveToLocalStorage.addEventListener('click', function (e) {
     let arrCards = [];
     document.querySelectorAll(`.parent-cards .card`).forEach(function (card) {
-        arrCards.push(collectData(card)) // Push object for question
+        arrCards.push(collectData(card))
     })
 
     let hasError = arrCards.some(function (el) { return el.options.length < 2 });
@@ -528,7 +548,8 @@ btnSaveToLocalStorage.addEventListener('click', function (e) {
     }
     // Save to local Storage
     location.reload();
-})
+});
+
 // Add Lister to add option
 document.addEventListener('click', function (e) {
     const target = e.target.closest('[parent-id]');
@@ -540,28 +561,26 @@ document.addEventListener('click', function (e) {
     count++;
     answers[answers.length - 1].focus();
     window.scrollBy({
-
         behavior: "smooth"
     })
-
 });
+
 // Add Lister to Delete Item
 document.addEventListener('click', function (e) {
     const target = e.target.closest('[selector]');
     if (!target) return;
-
-    const selector = target.getAttribute('selector');
-    deleteItem(selector)
-
-    // Check if no cards hide save to local storage
+    deleteItem(target.getAttribute('selector'))
 });
+
+// Add Event Listener to Reset All button
 document.getElementById('reset-all').addEventListener('click', function (e) {
     document.querySelector('.parent-cards').innerHTML = '';
     parentId = 1;
     localStorage.clear()
     show(btnSaveToLocalStorage, false)
     errorBuilder.style.display = 'none';
-})
+});
+
+// Get data from local storage and show data in builder
 getFromlocalStorage();
 showDataInBuilder();
-

@@ -536,7 +536,8 @@ p {
     width: 95%;
     margin: auto;
     position: relative;
-    bottom: 50px
+    bottom: 50px;
+    justify-content: space-between
 }
 
 #moveElement button {

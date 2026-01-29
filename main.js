@@ -371,29 +371,54 @@ function showDataInBuilder() {
             let ansInput = document.createElement('div');
             ansInput.classList.add('answer-input');
             ansInput.id = generateId('option');
+
+            // Create wrapper div structure matching addAnswer()
+            let flexWrapper = document.createElement('div');
+            flexWrapper.classList.add('d-flex', 'gap-10', 'flex-grow');
+
+            let flexCenter = document.createElement('div');
+            flexCenter.classList.add('flex-center', 'gap-10');
+
+            // Add drag handle
+            let dragHandle = document.createElement('i');
+            dragHandle.className = 'fa-solid fa-grip-vertical drag-handle';
             let radioInput = document.createElement('input');
             radioInput.type = 'radio'
             radioInput.style = `cursor: pointer;`
             radioInput.classList.add('radio');
             radioInput.checked = e == el.correctAnswer;
-            radioInput.setAttribute('name', `option_${card.id}`)
+            radioInput.setAttribute('name', `${card.id.replace('-', '_')}`)
+
+            flexCenter.appendChild(dragHandle);
+            flexCenter.appendChild(radioInput);
+            flexWrapper.appendChild(flexCenter);
+
             let answerInput = document.createElement('input');
             answerInput.type = "text";
             answerInput.classList.add('answer');
             answerInput.setAttribute('placeholder', `option ${index}`)
+            answerInput.value = e;
 
-            ansInput.appendChild(radioInput);
+            flexWrapper.appendChild(answerInput);
+            ansInput.appendChild(flexWrapper);
+
             let answerI = document.createElement('i');
             answerI.className = 'fa-solid fa-xmark';
             answerI.setAttribute('selector', ansInput.id);
             answerI.onclick = function () {
                 deleteItem(ansInput.id);
             };
-            ansInput.appendChild(answerInput);
             ansInput.appendChild(answerI);
             ansCont.appendChild(ansInput);
-            answerInput.value = e
         })
+
+        // Initialize sortable for this answer container
+        Sortable.create(ansCont, {
+            handle: '.drag-handle',
+            animation: 150,
+            group: card.id,
+            scroll: true
+        });
         let addOption = document.createElement('div');
         addOption.classList.add('add-option');
         addOption.setAttribute('parent-id', card.id);

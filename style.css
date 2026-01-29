@@ -7,9 +7,11 @@
 .d-none {
     display: none;
 }
+
 body {
     font-family: sans-serif;
 }
+
 .parent {
     background-color: ghostwhite;
     border-bottom-width: 27px;
@@ -43,7 +45,6 @@ body {
         font-size: small;
     }
 }
-
 
 @media(min-width:992px) {
     .container {
@@ -83,12 +84,6 @@ body {
     }
 }
 
-
-
-
-
-
-
 /* start head  */
 .head {
     display: flex;
@@ -96,10 +91,7 @@ body {
     padding-top: 15px;
     padding-bottom: 15px;
     background-color: #fff;
-
-
 }
-
 
 .head div {
     display: flex;
@@ -119,10 +111,7 @@ body {
     opacity: .5;
 }
 
-
-/* end head  */
-
-
+/* Start section welcome */
 .container .welcome {
     height: 317px;
     background-color: #fff;
@@ -145,13 +134,11 @@ body {
 }
 
 .welcome .content-start {
-
     font-size: x-large;
 }
 
 .btnStart {
     padding-top: 40px;
-
 }
 
 .btnStart button {
@@ -190,7 +177,6 @@ body {
     padding: 40px;
     border-radius: 10px;
     background-color: white;
-
 }
 
 .section-builder .head-builder {
@@ -220,7 +206,6 @@ p {
 }
 
 .section-builder .error {
-
     display: flex;
     align-items: center;
     background-color: #ff000041;
@@ -246,6 +231,7 @@ p {
     padding-left: 10px;
 }
 
+/* Start section-builder parent cards */
 .section-builder .parent-cards .card {
     border: solid 1px;
     border-radius: 5px;
@@ -253,7 +239,6 @@ p {
     color: darkgrey;
     margin-top: 20px;
     font-size: small;
-    /* display: none; */
 }
 
 .section-builder .parent-cards .card .head-card {
@@ -262,9 +247,7 @@ p {
     margin-left: 10px;
     margin-right: 20px;
     padding-top: 10px;
-
 }
-
 
 .section-builder .parent-cards .card .question-content input {
     width: 85%;
@@ -279,14 +262,11 @@ p {
 .card input {
     outline: none;
     border: 1px solid darkgrey;
-
-
 }
 
 .card i:hover {
     cursor: pointer;
     color: red;
-
 }
 
 .card .answer-content {
@@ -356,7 +336,6 @@ p {
     background-color: #0062ff;
     border-radius: 5px;
     cursor: pointer;
-
     display: none;
 }
 
@@ -368,12 +347,7 @@ p {
     background-color: green;
 }
 
-
-
-
-/* End section-builder */
-/* start section-takequiz */
-
+/* Start section-takequiz */
 .cards {
     padding-bottom: 60px;
     background-color: white;
@@ -466,7 +440,6 @@ p {
 #moveElement #finish:hover {
     background-color: green;
 }
-
 
 #counterQuestion {
     display: flex;
